@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaxSmart Assistant</title>
+  <link href="./src/output.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      box-shadow: 0 0 10px rgba(126, 34, 206, 0.6);
+      z-index: 9999;
+      transition: width 0.2s ease-out;
+    }
+    .btn {
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      color: white;
+      padding: 1rem;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.2);
+    }
+    /* Typing animation styles */
+    @keyframes typing {
+      0% { opacity: 0.2; }
+      20% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
+    .dots {
+      display: inline-block;
+      animation: typing 1.4s infinite;
+    }
+    .dots:nth-child(2) { animation-delay: 0.2s; }
+    .dots:nth-child(3) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 text-gray-800 transition-colors duration-300">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-5 shadow-lg rounded-lg mb-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold tracking-wide">💼 TaxSmart Assistant</h1>
+        <p class="text-lg mt-2">Your AI-Powered Tax Guidance System</p>
+      </div>
+    </header>
+
+    <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+      <div id="chatWindow" class="h-96 overflow-y-auto mb-4 space-y-4"></div>
+      <div class="flex gap-4">
+        <input type="text" id="userInput" 
+               class="flex-1 p-3 border-2 border-purple-200 rounded-full focus:outline-none focus:border-purple-400"
+               placeholder="Ask about tax filing or enter your financial details...">
+        <button onclick="handleSend()" 
+                class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105">
+          Send
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-10">
+      <button onclick="quickStart('income')" class="btn">💰 Income Reporting</button>
+      <button onclick="quickStart('deductions')" class="btn">📉 Deductions Guide</button>
+      <button onclick="quickStart('credits')" class="btn">💸 Tax Credits</button>
+      <button onclick="quickStart('filing')" class="btn">📄 Filing Process</button>
+    </div>
+
+    <div class="text-center">
+      <a href="index2.html" class="inline-block bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-md transition-transform transform hover:scale-105">
+        ⬅️ Back to Home
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center py-5 mt-12">
+    <p class="text-md">"Empowering every Indian to file taxes with ease — because understanding your money shouldn't be hard."</p>
+  </footer>
+
+  <script>
+    const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    const API_KEY = 'AIzaSyA3MY92PZtloLgLszp5CX9pl-sD0M6fiSY';
+
+    async function handleSend() {
+      const input = document.getElementById('userInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessageToChat('user', message);
+      input.value = '';
+
+      // Add typing indicator
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'flex justify-start';
+      typingIndicator.id = 'typingIndicator';
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'p-4 rounded-lg max-w-[80%] bg-gradient-to-r from-purple-100 to-pink-100 text-gray-800';
+      contentDiv.innerHTML = 'TaxSmart Assistant is typing<span class="dots">.</span><span class="dots">.</span><span class="dots">.</span>';
+      
+      typingIndicator.appendChild(contentDiv);
+      document.getElementById('chatWindow').appendChild(typingIndicator);
+      document.getElementById('chatWindow').scrollTop = document.getElementById('chatWindow').scrollHeight;
+
+      try {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: message
+                  }
+                ]
+              }
+            ]
+          })
+        });
+
+        // Remove typing indicator
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) {
+          indicator.remove();
+        }
+
+        const data = await response.json();
+        const assistantMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ Couldn't process tax query. Please try again.";
+        addMessageToChat('assistant', assistantMessage);
+      } catch (error) {
+        // Remove typing indicator in case of error
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) {
+          indicator.remove();
+        }
+        
+        console.error('Error:', error);
+        addMessageToChat('error', '⚠️ Error processing tax request. Please try again.');
+      }
+    }
+
+    async function quickStart(category) {
+      const prompts = {
+        income: "Explain how to report income on tax returns.",
+        deductions: "What deductions can I claim this year?",
+        credits: "Which tax credits am I eligible for?",
+        filing: "Walk me through the tax filing process step-by-step."
+      };
+      document.getElementById('userInput').value = prompts[category];
+      await handleSend();
+    }
+
+    function addMessageToChat(role, message) {
+      const chatWindow = document.getElementById('chatWindow');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `flex justify-${role === 'user' ? 'end' : 'start'}`;
+
+      const contentDiv = document.createElement('div');
+      contentDiv.className = `p-4 rounded-lg max-w-[80%] ${
+        role === 'user' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : 
+        role === 'error' ? 'bg-red-100 text-red-800' : 'bg-gradient-to-r from-purple-100 to-pink-100 text-gray-800'}`;
+      contentDiv.innerHTML = message.replace(/\n/g, '<br>');
+
+      messageDiv.appendChild(contentDiv);
+      chatWindow.appendChild(messageDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    // Add progress bar functionality
+    window.addEventListener('scroll', () => {
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollTop = window.scrollY;
+      const width = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = `${width}%`;
+    });
+  </script>
+</body>
+</html>

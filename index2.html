@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automated Tax Filing Guide</title>
+  <link href="./src/output.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-side {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      box-shadow: 0 0 10px rgba(126, 34, 206, 0.6);
+      z-index: 9999;
+      transition: width 0.2s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 text-gray-800 transition-colors duration-300">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Header + Logo -->
+  <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-5 shadow-lg sticky top-0 z-40">
+    <div class="container mx-auto px-8 flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-wide">💸 Tax Filing Guide</h1>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="h-screen flex flex-col justify-center items-center text-center bg-gradient-to-r from-white via-blue-50 to-white">
+    <h2 class="text-5xl font-extrabold text-purple-700 mb-4 animate-fade-in">File Your Taxes Smarter with AI</h2>
+    <p class="text-xl text-gray-700 mb-8 animate-fade-in-delay">Let our intelligent tools simplify your income tax process in just a few clicks.</p>
+    <a href="#get-started" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-pink-500 hover:to-purple-500 text-white py-3 px-10 rounded-full text-lg font-semibold transition-transform transform hover:scale-105 animate-fade-in-delay">🚀 Get Started</a>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-16">
+    <div class="container mx-auto px-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 border-t-4 border-purple-400 fade-side">
+        <h3 class="text-2xl font-semibold text-purple-700 mb-3">📊 Smart Tax Calculator</h3>
+        <p class="text-gray-600">Quickly calculate your tax liability based on income and deductions using updated slabs.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 border-t-4 border-pink-400 fade-side">
+        <h3 class="text-2xl font-semibold text-pink-600 mb-3">🤖 Gemini Chatbot</h3>
+        <p class="text-gray-600">Ask your queries and get personalized responses about deductions, tax regimes, and more.</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-transform transform hover:-translate-y-1 border-t-4 border-indigo-400 fade-side">
+        <h3 class="text-2xl font-semibold text-indigo-700 mb-3">🧾 No Login Required</h3>
+        <p class="text-gray-600">Use the platform instantly without account creation. No data is stored or tracked.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-16 bg-white">
+    <div class="container mx-auto px-8">
+      <h2 class="text-4xl font-bold text-center text-purple-700 mb-10 fade-up">How It Works</h2>
+      <div class="grid md:grid-cols-2 gap-10">
+        <div class="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-xl shadow-lg fade-up">
+          <h3 class="text-2xl font-semibold text-indigo-800 mb-4">Step 1: Enter Income Details</h3>
+          <p class="text-gray-700">Provide your income, deductions, and expenses. We'll analyze your data for tax benefits.</p>
+        </div>
+        <div class="bg-gradient-to-br from-pink-100 to-purple-100 p-8 rounded-xl shadow-lg fade-up">
+          <h3 class="text-2xl font-semibold text-pink-700 mb-4">Step 2: Chat with AI</h3>
+          <p class="text-gray-700">Use our Gemini-powered chatbot to ask questions about deductions and filing tips.</p>
+        </div>
+        <div class="bg-gradient-to-br from-purple-100 to-indigo-100 p-8 rounded-xl shadow-lg fade-up">
+          <h3 class="text-2xl font-semibold text-purple-700 mb-4">Step 3: Get Instant Guidance</h3>
+          <p class="text-gray-700">Receive immediate responses that help you understand your tax liabilities better.</p>
+        </div>
+        <div class="bg-gradient-to-br from-yellow-100 to-pink-100 p-8 rounded-xl shadow-lg fade-up">
+          <h3 class="text-2xl font-semibold text-yellow-700 mb-4">Step 4: File Confidently</h3>
+          <p class="text-gray-700">Equipped with knowledge, move ahead and file your taxes easily and confidently.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get Started Section -->
+  <section id="get-started" class="py-20 bg-gradient-to-br from-white via-purple-50 to-pink-50">
+    <div class="container mx-auto px-8 text-center fade-up">
+      <h2 class="text-4xl font-bold text-purple-700 mb-6">Let's Get You Started</h2>
+      <p class="text-lg text-gray-700 mb-10">Begin by selecting what you'd like to do</p>
+      <div class="flex flex-col md:flex-row justify-center items-center gap-6 flex-wrap">
+        <a href="calculator.html" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md">Use Tax Calculator</a>
+        <a href="chatbot.html" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md">Chat with AI</a>
+        <a href="guide.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-md">View Tax Guide</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Home Button -->
+  
+  <!-- Footer -->
+  <footer id="footer" class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center py-5 mt-12">
+    <p class="text-md">"Empowering every Indian to file taxes with ease — because understanding your money shouldn't be hard."</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.fade-up, .fade-side').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollTop = window.scrollY;
+      const width = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = `${width}%`;
+    });
+  </script>
+</body>
+</html>

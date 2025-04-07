@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Filing Guide - Made Simple</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 8px;
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      box-shadow: 0 0 10px rgba(126, 34, 206, 0.6);
+      z-index: 9999;
+      transition: width 0.2s ease-out;
+    }
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-side {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-side.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .highlight-box {
+      border-left: 4px solid #7e22ce;
+      background: linear-gradient(to right, rgba(126, 34, 206, 0.05), rgba(236, 72, 153, 0.05));
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .highlight-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(126, 34, 206, 0.15);
+    }
+    .tip-box {
+      background: linear-gradient(to right, #f0f9ff, #e0f2fe);
+      border: 1px solid #bae6fd;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    .tip-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    }
+    .warning-box {
+      background: linear-gradient(to right, #fff7ed, #fed7aa);
+      border: 1px solid #fdba74;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    .warning-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(251, 146, 60, 0.15);
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      color: white;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .step-number:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(126, 34, 206, 0.5);
+    }
+    .section-card {
+      transition: all 0.4s ease;
+    }
+    .section-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(126, 34, 206, 0.2);
+    }
+    .image-container {
+      overflow: hidden;
+      border-radius: 50%;
+      transition: all 0.5s ease;
+    }
+    .image-container:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(126, 34, 206, 0.3);
+    }
+    .image-container img {
+      transition: all 0.5s ease;
+    }
+    .image-container:hover img {
+      transform: scale(1.1);
+    }
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: white;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .list-item {
+      transition: all 0.3s ease;
+      padding-left: 0.5rem;
+      border-left: 2px solid transparent;
+    }
+    .list-item:hover {
+      padding-left: 1rem;
+      border-left: 2px solid #7e22ce;
+      background: linear-gradient(to right, rgba(126, 34, 206, 0.05), transparent);
+    }
+    .btn-gradient {
+      background: linear-gradient(to right, #7e22ce, #ec4899);
+      transition: all 0.3s ease;
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(to right, #ec4899, #7e22ce);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(126, 34, 206, 0.4);
+    }
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(126, 34, 206, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(126, 34, 206, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(126, 34, 206, 0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 text-gray-800 transition-colors duration-300">
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-5 shadow-lg sticky top-0 z-40">
+    <div class="container mx-auto px-8 flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-wide">📝 E-Filing Guide</h1>
+      <div class="flex space-x-4">
+        <a href="calculator.html" class="nav-link hover:bg-white/20 px-4 py-2 rounded-full transition-all">Calculator</a>
+        <a href="chatbot.html" class="nav-link hover:bg-white/20 px-4 py-2 rounded-full transition-all">Chat Assistant</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-16 text-center">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-64 h-64 mx-auto mb-8 rounded-full shadow-xl">
+          <img src="https://img.freepik.com/free-vector/tax-filing-concept-illustration_114360-7873.jpg" alt="E-Filing Made Easy" class="w-full h-full object-cover">
+        </div>
+        <h1 class="text-4xl font-bold text-purple-700 mb-4">Tax Filing Made Simple & Friendly</h1>
+        <p class="text-xl text-gray-600 mb-6">Your complete guide to hassle-free e-filing</p>
+        <div class="highlight-box text-left">
+          <p class="text-lg text-gray-700">Think of tax filing as a financial health check-up. Just like you visit a doctor regularly, filing your taxes on time keeps your financial records healthy and compliant with the law. Our guide will walk you through the entire process step-by-step, making it as simple as possible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Purpose Section -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-concept-illustration_114360-7874.jpg" alt="Purpose" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4 text-center">Why We're Here</h2>
+        <p class="text-lg text-gray-600 text-center mb-6">We're here to make your tax filing journey smooth and stress-free. Our goal is to help you understand and complete your tax filing process quickly and correctly, without any confusion or complications.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <div class="bg-purple-50 p-6 rounded-xl shadow-md section-card">
+            <h3 class="text-xl font-semibold text-purple-600 mb-3">🎯 Our Mission</h3>
+            <p class="text-gray-700">To simplify the complex world of tax filing and make it accessible to everyone, regardless of their financial knowledge.</p>
+          </div>
+          <div class="bg-pink-50 p-6 rounded-xl shadow-md section-card">
+            <h3 class="text-xl font-semibold text-pink-600 mb-3">💡 Our Approach</h3>
+            <p class="text-gray-700">Breaking down complicated tax concepts into simple, easy-to-understand language with step-by-step guidance.</p>
+          </div>
+        </div>
+        
+        <div class="tip-box mt-8">
+          <h3 class="text-lg font-semibold text-blue-700 mb-2">💡 Pro Tip</h3>
+          <p class="text-gray-700">The earlier you start preparing for tax filing, the smoother the process will be. Don't wait until the last minute!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITR Explanation -->
+  <section class="py-12">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-document-concept-illustration_114360-7875.jpg" alt="ITR" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4 text-center">What is ITR?</h2>
+        <p class="text-lg text-gray-600 text-center mb-6">ITR (Income Tax Return) is like a report card of your earnings and taxes. It's a form where you tell the government about your income and the taxes you've paid during the year.</p>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md mb-6 section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-3">📋 Breaking Down ITR</h3>
+          <p class="text-gray-700 mb-4">Think of your ITR as a financial story you're telling the government. It includes:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2">
+            <li class="list-item"><strong>Personal Information:</strong> Your basic details like name, address, and PAN</li>
+            <li class="list-item"><strong>Income Details:</strong> All sources of income (salary, business, investments, etc.)</li>
+            <li class="list-item"><strong>Deductions:</strong> Expenses and investments that reduce your taxable income</li>
+            <li class="list-item"><strong>Tax Computation:</strong> Calculation of how much tax you owe or how much refund you're entitled to</li>
+          </ul>
+        </div>
+        
+        <div class="highlight-box">
+          <p class="text-gray-700"><strong>Did You Know?</strong> There are different types of ITR forms (ITR-1, ITR-2, etc.) depending on your income sources and complexity of your financial affairs. Choosing the right form is crucial for accurate filing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Importance of Filing -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-importance-concept-illustration_114360-7876.jpg" alt="Importance" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4 text-center">Why File ITR?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-purple-50 p-6 rounded-xl shadow-md section-card">
+            <h3 class="text-xl font-semibold text-purple-600 mb-3">✅ Legal Benefits</h3>
+            <ul class="text-gray-700 space-y-3">
+              <li class="list-item">• It's your legal responsibility</li>
+              <li class="list-item">• Avoids penalties and legal issues</li>
+              <li class="list-item">• Maintains compliance with tax laws</li>
+              <li class="list-item">• Prevents future complications</li>
+            </ul>
+          </div>
+          <div class="bg-pink-50 p-6 rounded-xl shadow-md section-card">
+            <h3 class="text-xl font-semibold text-pink-600 mb-3">💰 Financial Benefits</h3>
+            <ul class="text-gray-700 space-y-3">
+              <li class="list-item">• Helps you claim tax refunds</li>
+              <li class="list-item">• Required for loans and visas</li>
+              <li class="list-item">• Proof of income for various purposes</li>
+              <li class="list-item">• Financial credibility</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="warning-box">
+          <h3 class="text-lg font-semibold text-amber-700 mb-2">⚠️ Important Warning</h3>
+          <p class="text-gray-700">Not filing your ITR when required can lead to penalties ranging from ₹1,000 to ₹10,000, depending on the delay. In some cases, it can even result in prosecution.</p>
+        </div>
+        
+        <div class="tip-box mt-6">
+          <h3 class="text-lg font-semibold text-blue-700 mb-2">💡 Pro Tip</h3>
+          <p class="text-gray-700">Even if your income is below the taxable limit, filing an ITR can be beneficial as it serves as proof of income and can help in various financial transactions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who Needs to File -->
+  <section class="py-12">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-filing-eligibility-concept-illustration_114360-7877.jpg" alt="Eligibility" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4 text-center">Who Needs to File ITR?</h2>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md mb-6 section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-3">📊 Income-Based Criteria</h3>
+          <p class="text-gray-700 mb-4">You must file an ITR if:</p>
+          <ul class="text-lg text-gray-600 space-y-4">
+            <li class="list-item">📊 If your total income exceeds ₹2.5 lakhs (₹3 lakhs for senior citizens, ₹5 lakhs for super senior citizens)</li>
+            <li class="list-item">💰 If you have foreign assets or foreign income</li>
+            <li class="list-item">💳 If you want to claim tax refunds</li>
+            <li class="list-item">🏦 If you have deposited more than ₹1 crore in one or more current accounts</li>
+            <li class="list-item">✈️ If you have spent more than ₹2 lakhs on foreign travel</li>
+            <li class="list-item">🏠 If you have paid more than ₹1 lakh in electricity bills</li>
+          </ul>
+        </div>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-3">🏢 Business and Corporate Entities</h3>
+          <p class="text-gray-700 mb-4">The following entities must file ITR regardless of income:</p>
+          <ul class="text-lg text-gray-600 space-y-4">
+            <li class="list-item">🏢 Companies and firms</li>
+            <li class="list-item">👥 Association of Persons (AOP)</li>
+            <li class="list-item">🤝 Body of Individuals (BOI)</li>
+            <li class="list-item">🏛️ Local authorities</li>
+            <li class="list-item">🏛️ Artificial Judicial Persons</li>
+          </ul>
+        </div>
+        
+        <div class="highlight-box mt-6">
+          <p class="text-gray-700"><strong>Note:</strong> The income thresholds mentioned above are for the Financial Year 2023-24 (Assessment Year 2024-25). These limits may change in future years based on government policies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Required Documents -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-documents-concept-illustration_114360-7878.jpg" alt="Documents" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4 text-center">Get Ready: Required Documents</h2>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md mb-6 section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-3">📄 Essential Documents</h3>
+          <ul class="text-lg text-gray-600 space-y-4">
+            <li class="list-item">📄 Form 16 (from your employer)</li>
+            <li class="list-item">💳 Bank statements (all accounts)</li>
+            <li class="list-item">🏠 Property documents (if applicable)</li>
+            <li class="list-item">📱 Aadhaar Card</li>
+            <li class="list-item">🏦 Investment proofs (mutual funds, stocks, etc.)</li>
+            <li class="list-item">📝 PAN Card</li>
+            <li class="list-item">💼 Business documents (if self-employed)</li>
+          </ul>
+        </div>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-3">📋 Additional Documents (if applicable)</h3>
+          <ul class="text-lg text-gray-600 space-y-4">
+            <li class="list-item">🏠 Home loan statement</li>
+            <li class="list-item">🏥 Medical bills and insurance policies</li>
+            <li class="list-item">📚 Education loan documents</li>
+            <li class="list-item">💍 Marriage certificate (for claiming HRA)</li>
+            <li class="list-item">👶 Children's education receipts</li>
+            <li class="list-item">🏛️ Property rent receipts</li>
+            <li class="list-item">🌍 Foreign asset details</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box mt-6">
+          <h3 class="text-lg font-semibold text-blue-700 mb-2">💡 Pro Tip</h3>
+          <p class="text-gray-700">Create a dedicated folder (physical or digital) to store all your tax-related documents throughout the year. This will save you time and stress during the filing season.</p>
+        </div>
+        
+        <div class="warning-box mt-4">
+          <h3 class="text-lg font-semibold text-amber-700 mb-2">⚠️ Important</h3>
+          <p class="text-gray-700">Keep these documents safely for at least 6 years as the Income Tax Department can ask for them during scrutiny or assessment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Important Forms -->
+  <section class="py-12">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-purple-700 mb-8 text-center">Important Forms Explained</h2>
+        
+        <div class="mb-12 bg-white p-6 rounded-xl shadow-md section-card">
+          <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+            <img src="https://img.freepik.com/free-vector/form-16-concept-illustration_114360-7879.jpg" alt="Form 16" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-2xl font-bold text-purple-600 mb-4 text-center">Form 16</h3>
+          <p class="text-lg text-gray-600 text-center mb-4">A certificate from your employer showing your salary details and taxes deducted. It's like a yearly salary report card.</p>
+          
+          <div class="highlight-box">
+            <h4 class="font-semibold text-purple-700 mb-2">What's in Form 16?</h4>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+              <li class="list-item">Part A: Contains your basic details, employer details, and TDS summary</li>
+              <li class="list-item">Part B: Contains detailed salary breakup, deductions, and tax computation</li>
+            </ul>
+          </div>
+          
+          <div class="tip-box mt-4">
+            <p class="text-gray-700">Your employer must issue Form 16 by June 15th of the assessment year. If they delay, you can file a complaint with the Income Tax Department.</p>
+          </div>
+        </div>
+
+        <div class="mb-12 bg-white p-6 rounded-xl shadow-md section-card">
+          <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+            <img src="https://img.freepik.com/free-vector/ais-concept-illustration_114360-7880.jpg" alt="AIS" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-2xl font-bold text-purple-600 mb-4 text-center">Annual Information Statement (AIS)</h3>
+          <p class="text-lg text-gray-600 text-center mb-4">A comprehensive view of all your financial transactions, including salary, interest, and investments.</p>
+          
+          <div class="highlight-box">
+            <h4 class="font-semibold text-purple-700 mb-2">What's in AIS?</h4>
+            <ul class="list-disc pl-6 text-gray-700 space-y-2">
+              <li class="list-item">Tax Deducted at Source (TDS)</li>
+              <li class="list-item">Tax Collected at Source (TCS)</li>
+              <li class="list-item">Specified Financial Transactions (SFT)</li>
+              <li class="list-item">Payment of taxes</li>
+              <li class="list-item">Demand and refund</li>
+            </ul>
+          </div>
+          
+          <div class="tip-box mt-4">
+            <p class="text-gray-700">AIS is more comprehensive than Form 26AS and includes all your financial transactions. Always verify the information in your AIS before filing your return.</p>
+          </div>
+        </div>
+
+        <div class="mb-12 bg-white p-6 rounded-xl shadow-md section-card">
+          <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+            <img src="https://img.freepik.com/free-vector/form-26as-concept-illustration_114360-7881.jpg" alt="Form 26AS" class="w-full h-full object-cover">
+          </div>
+          <h3 class="text-2xl font-bold text-purple-600 mb-4 text-center">Form 26AS</h3>
+          <p class="text-lg text-gray-600 text-center mb-4">Your tax credit statement. Download it from the Income Tax portal - it shows all taxes deducted on your behalf.</p>
+          
+          <div class="highlight-box">
+            <h4 class="font-semibold text-purple-700 mb-2">How to Download Form 26AS</h4>
+            <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+              <li class="list-item">Log in to the Income Tax portal (incometax.gov.in)</li>
+              <li class="list-item">Go to 'My Account' → 'View Form 26AS (Tax Credit)'</li>
+              <li class="list-item">Select the assessment year</li>
+              <li class="list-item">Download the form in PDF format</li>
+            </ol>
+          </div>
+          
+          <div class="warning-box mt-4">
+            <p class="text-gray-700">Always cross-check the TDS details in Form 26AS with your Form 16. Any mismatch should be reported to your employer or the deductor.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-Filing Steps -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/e-filing-steps-concept-illustration_114360-7882.jpg" alt="E-Filing Steps" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-8 text-center">Ready to File? Here's How</h2>
+        
+        <div class="space-y-8">
+          <div class="bg-purple-50 p-6 rounded-lg section-card">
+            <h3 class="text-xl font-bold text-purple-600 mb-4">Step 1: Register on E-Filing Portal</h3>
+            <p class="text-gray-600 mb-4">Visit incometax.gov.in and create your account using your PAN and basic details.</p>
+            
+            <div class="highlight-box">
+              <h4 class="font-semibold text-purple-700 mb-2">Registration Process</h4>
+              <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                <li class="list-item">Click on 'Register Yourself' on the homepage</li>
+                <li class="list-item">Select user type (Individual)</li>
+                <li class="list-item">Enter your PAN, name, and date of birth</li>
+                <li class="list-item">Validate your details</li>
+                <li class="list-item">Create a password and security questions</li>
+                <li class="list-item">Verify your email and mobile number</li>
+              </ol>
+            </div>
+            
+            <div class="tip-box mt-4">
+              <p class="text-gray-700">If you already have an account but forgot your password, use the 'Forgot Password' option. You'll need your PAN, date of birth, and registered email/mobile to reset it.</p>
+            </div>
+          </div>
+
+          <div class="bg-purple-50 p-6 rounded-lg section-card">
+            <h3 class="text-xl font-bold text-purple-600 mb-4">Step 2: File Your Return</h3>
+            
+            <div class="mb-6">
+              <h4 class="font-semibold text-purple-700 mb-2">2.1: Choose the Right ITR Form</h4>
+              <p class="text-gray-700 mb-2">Select the appropriate ITR form based on your income sources:</p>
+              <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li class="list-item"><strong>ITR-1:</strong> For individuals with salary, one house property, and other small incomes</li>
+                <li class="list-item"><strong>ITR-2:</strong> For individuals with capital gains or foreign assets</li>
+                <li class="list-item"><strong>ITR-3:</strong> For individuals and HUFs with business/professional income</li>
+                <li class="list-item"><strong>ITR-4:</strong> For presumptive business income</li>
+              </ul>
+            </div>
+            
+            <div class="mb-6">
+              <h4 class="font-semibold text-purple-700 mb-2">2.2: Fill in Your Details</h4>
+              <ol class="text-gray-600 space-y-4">
+                <li><span class="step-number">1</span> Validate your personal information</li>
+                <li><span class="step-number">2</span> Enter your total income (all earnings combined)</li>
+                <li><span class="step-number">3</span> Add your deductions (tax-saving investments)</li>
+                <li><span class="step-number">4</span> Verify tax payment details with Form 26AS</li>
+                <li><span class="step-number">5</span> Review and confirm your return summary</li>
+              </ol>
+            </div>
+            
+            <div class="highlight-box">
+              <h4 class="font-semibold text-purple-700 mb-2">What is Gross Total Income?</h4>
+              <p class="text-gray-700">Gross Total Income is the sum of all your income from various sources before applying any deductions. It includes:</p>
+              <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                <li class="list-item">Salary income</li>
+                <li class="list-item">House property income</li>
+                <li class="list-item">Business or professional income</li>
+                <li class="list-item">Capital gains</li>
+                <li class="list-item">Other sources (interest, rent, etc.)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-purple-50 p-6 rounded-lg section-card">
+            <h3 class="text-xl font-bold text-purple-600 mb-4">Step 3: E-Verify Your Return</h3>
+            <p class="text-gray-600 mb-4">Your ITR won't be processed until verified. Choose one method:</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div class="bg-white p-4 rounded-lg shadow-sm section-card">
+                <h4 class="font-semibold text-purple-700 mb-2">Digital Methods</h4>
+                <ul class="text-gray-600 space-y-2">
+                  <li class="list-item">✅ Aadhaar OTP</li>
+                  <li class="list-item">✅ Bank Account</li>
+                  <li class="list-item">✅ Demat Account</li>
+                </ul>
+              </div>
+              <div class="bg-white p-4 rounded-lg shadow-sm section-card">
+                <h4 class="font-semibold text-purple-700 mb-2">Physical Method</h4>
+                <ul class="text-gray-600 space-y-2">
+                  <li class="list-item">✅ Send signed ITR-V to CPC Bengaluru</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="warning-box">
+              <h4 class="font-semibold text-amber-700 mb-2">Important</h4>
+              <p class="text-gray-700">E-verification must be done within 120 days of filing the return. If not verified, your return will be considered invalid.</p>
+            </div>
+            
+            <div class="tip-box mt-4">
+              <h4 class="font-semibold text-blue-700 mb-2">Pro Tip</h4>
+              <p class="text-gray-700">Aadhaar OTP is the fastest method for e-verification. Make sure your Aadhaar is linked to your PAN for this option.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Common Mistakes to Avoid -->
+  <section class="py-12">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-purple-700 mb-8 text-center">Common Mistakes to Avoid</h2>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md mb-6 section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-4">❌ Filing Mistakes</h3>
+          <ul class="text-gray-700 space-y-3">
+            <li class="list-item">• Choosing the wrong ITR form</li>
+            <li class="list-item">• Not reporting all income sources</li>
+            <li class="list-item">• Missing out on eligible deductions</li>
+            <li class="list-item">• Incorrect bank account details for refund</li>
+            <li class="list-item">• Not verifying the return after filing</li>
+          </ul>
+        </div>
+        
+        <div class="bg-white p-6 rounded-xl shadow-md section-card">
+          <h3 class="text-xl font-semibold text-purple-600 mb-4">❌ Documentation Mistakes</h3>
+          <ul class="text-gray-700 space-y-3">
+            <li class="list-item">• Not keeping proper records of investments</li>
+            <li class="list-item">• Missing Form 16 or Form 26AS</li>
+            <li class="list-item">• Not reconciling TDS with Form 26AS</li>
+            <li class="list-item">• Incomplete or incorrect personal information</li>
+            <li class="list-item">• Not maintaining proof of deductions claimed</li>
+          </ul>
+        </div>
+        
+        <div class="tip-box mt-6">
+          <h3 class="text-lg font-semibold text-blue-700 mb-2">💡 Pro Tip</h3>
+          <p class="text-gray-700">Double-check all information before submitting your return. It's better to take a few extra minutes to verify than to face issues later.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section class="py-12 bg-white">
+    <div class="container mx-auto px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <div class="image-container w-48 h-48 mx-auto mb-8 rounded-full shadow-lg">
+          <img src="https://img.freepik.com/free-vector/tax-success-concept-illustration_114360-7883.jpg" alt="Success" class="w-full h-full object-cover">
+        </div>
+        <h2 class="text-3xl font-bold text-purple-700 mb-4">We're Here to Help!</h2>
+        <p class="text-lg text-gray-600 mb-6">We hope this guide makes your tax filing journey easier. Remember, filing your taxes on time is not just a responsibility, it's a step towards financial wellness. Happy filing! 🎉</p>
+        
+        <div class="highlight-box text-left">
+          <h3 class="text-xl font-semibold text-purple-700 mb-2">Need More Assistance?</h3>
+          <p class="text-gray-700">Our tools are designed to help you throughout your tax filing journey:</p>
+          <ul class="list-disc pl-6 text-gray-700 space-y-2 mt-2">
+            <li class="list-item">Use our <a href="calculator.html" class="text-purple-600 hover:underline">Tax Calculator</a> to estimate your tax liability</li>
+            <li class="list-item">Chat with our <a href="chatbot.html" class="text-purple-600 hover:underline">AI Assistant</a> for personalized guidance</li>
+            <li class="list-item">Refer to this guide whenever you need a refresher on the filing process</li>
+          </ul>
+        </div>
+        
+        <div class="mt-8">
+          <p class="text-gray-700">Remember, tax filing is a journey, not a destination. With the right tools and knowledge, you can make it a smooth and stress-free experience.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Back to Home Button -->
+  <div class="container mx-auto px-8 text-center py-8">
+    <a href="index2.html" class="btn-gradient inline-block text-white py-3 px-8 rounded-full text-lg font-semibold shadow-md pulse">Back to Home</a>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-purple-600 to-pink-500 text-white text-center py-5 mt-12">
+    <p class="text-md">"Empowering every Indian to file taxes with ease — because understanding your money shouldn't be hard."</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.fade-up, .fade-side').forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollTop = window.scrollY;
+      const width = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = `${width}%`;
+    });
+  </script>
+</body>
+</html> 
